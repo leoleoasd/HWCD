@@ -21,6 +21,7 @@
 
 extern nvs_handle_t nvs;
 void einit();
-String nvs_read_string(const char *);
+std::string nvs_read_string(const char *);
+std::string format(const char *, ...);
 
 #endif // HWCD_INCLUDE_INIT_H_

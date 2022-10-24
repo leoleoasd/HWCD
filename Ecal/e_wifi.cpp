@@ -9,9 +9,9 @@ static const char *TAG = "ECal Wifi";
 
 void wifi_init() {
   size_t length;
-  String ssid = nvs_read_string("ssid");
-  String pass = nvs_read_string("pass");
-  bool has_ssid = !ssid.isEmpty() && !pass.isEmpty();
+  std::string ssid = nvs_read_string("ssid");
+  std::string pass = nvs_read_string("pass");
+  bool has_ssid = !ssid.empty() && !pass.empty();
   IPAddress  ip;
   if (has_ssid) {
     // ssid found, connect to WiFi

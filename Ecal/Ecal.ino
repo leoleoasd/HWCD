@@ -11,6 +11,7 @@
 
 #include "e_wifi.h"
 #include "http.h"
+#include "ical.h"
 #include "init.h"
 
 static const char *TAG = "ECal Main";
@@ -22,6 +23,9 @@ void setup() {
   if(WiFiClass::getMode() == WIFI_MODE_AP){
     // TODO: Write instructions on screen.
     return;
+  }
+  if(!nvs_read_string("ical_url").empty()) {
+    download();
   }
 //
 //

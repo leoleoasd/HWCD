@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html lang="en_US"><head>
+    <title>E-Calendar </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        function submit() {
+            setTimeout(function(){ document.location.reload(false); }, 500);
+        }
+    </script></head><body>
+
+<form action="/update" target="hidden-form">
+    SSID: <input type="text" name="ssid" value="%ssid%"> <br>
+    PASS: <input type="text" name="pass" value="%pass%"> <br>
+    ICal: <input type="text" name="ical_url" value="%ical_url%"> <br>
+    Proxy: <input type="text" name="proxy" value="%proxy%"> <br>
+    <input type="submit" value="Submit" onclick="submit()">
+</form><br>
+
+<a href="/clear">Factory Reset</a><br>
+<iframe style="display:none" name="hidden-form"></iframe>
+</body>
+</html>

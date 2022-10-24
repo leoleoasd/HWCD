@@ -6,25 +6,8 @@
 
 static const char *TAG = "Ecal http";
 
-const char index_html[] = R"html(
-<!DOCTYPE HTML><html><head>
-  <title>E-Calendar </title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script>
-    function submit() {
-      setTimeout(function(){ document.location.reload(false); }, 500);
-    }
-  </script></head><body>
-
-  <form action="/update" target="hidden-form">
-    SSID: <input type="text" name="ssid" value="%ssid%"> <br>
-    PASS: <input type="text" name="pass" value="%pass%"> <br>
-    <input type="submit" value="Submit" onclick="submit()">
-  </form><br>
-
-  <a href="/clear">Factory Reset</a><br>
-  <iframe style="display:none" name="hidden-form"></iframe>
-</body></html>)html";
+//const char index_html[] = R"html()html";
+extern const char index_html[] asm("_binary_Ecal_html_index_html_start");
 
 String processor(const String& var)
 {

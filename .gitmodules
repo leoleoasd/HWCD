@@ -1,0 +1,3 @@
+[submodule "lib/icalendar"]
+	path = lib/icalendar
+	url = git@github.com:jgonera/icalendarlib.git
