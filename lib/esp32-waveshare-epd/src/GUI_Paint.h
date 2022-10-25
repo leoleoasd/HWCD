@@ -124,6 +124,7 @@ typedef enum {
 **/
 #define WHITE          0xFF
 #define BLACK          0x00
+#define TRANSPARENT          0x70
 #define RED            BLACK
 
 #define IMAGE_BACKGROUND    WHITE

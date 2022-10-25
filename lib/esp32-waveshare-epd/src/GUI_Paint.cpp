@@ -485,12 +485,20 @@ void Paint_DrawRectangle(UWORD Xstart, UWORD Ystart, UWORD Xend, UWORD Yend,
       for(Ypoint = Ystart; Ypoint < Yend; Ypoint += 3) {
         Paint_DrawLine(Xstart + (Ypoint % 3), Ypoint, Xend, Ypoint, Color , DOT_PIXEL_1X1, LINE_STYLE_DOTTED1);
       }
+      Paint_DrawLine(Xstart, Ystart, Xend, Ystart, Color, Line_width, LINE_STYLE_SOLID);
+      Paint_DrawLine(Xstart, Ystart, Xstart, Yend, Color, Line_width, LINE_STYLE_SOLID);
+      Paint_DrawLine(Xend, Yend, Xend, Ystart, Color, Line_width, LINE_STYLE_SOLID);
+      Paint_DrawLine(Xend, Yend, Xstart, Yend, Color, Line_width, LINE_STYLE_SOLID);
     } else if (Draw_Fill == DRAW_FILL_2) {
       UWORD Ypoint;
       for(Ypoint = Ystart; Ypoint < Yend; Ypoint += 3) {
         Paint_DrawLine(Xstart + (Ypoint % 3), Ypoint, Xend, Ypoint, Color , DOT_PIXEL_1X1, LINE_STYLE_DOTTED2);
         Paint_DrawLine(Xstart + ((Ypoint+1) % 3), Ypoint+1, Xend, Ypoint+1, Color , DOT_PIXEL_1X1, LINE_STYLE_DOTTED2);
       }
+      Paint_DrawLine(Xstart, Ystart, Xend, Ystart, Color, Line_width, LINE_STYLE_SOLID);
+      Paint_DrawLine(Xstart, Ystart, Xstart, Yend, Color, Line_width, LINE_STYLE_SOLID);
+      Paint_DrawLine(Xend, Yend, Xend, Ystart, Color, Line_width, LINE_STYLE_SOLID);
+      Paint_DrawLine(Xend, Yend, Xstart, Yend, Color, Line_width, LINE_STYLE_SOLID);
     } else {
         Paint_DrawLine(Xstart, Ystart, Xend, Ystart, Color, Line_width, LINE_STYLE_SOLID);
         Paint_DrawLine(Xstart, Ystart, Xstart, Yend, Color, Line_width, LINE_STYLE_SOLID);
@@ -605,7 +613,7 @@ void Paint_DrawChar(UWORD Xpoint, UWORD Ypoint, const char Acsii_Char,
                 if (*ptr & (0x80 >> (Column % 8))) {
                     Paint_SetPixel(Xpoint + Column, Ypoint + Page, Color_Foreground);
                     // Paint_DrawPoint(Xpoint + Column, Ypoint + Page, Color_Foreground, DOT_PIXEL_DFT, DOT_STYLE_DFT);
-                } else {
+                } else if(Color_Background != TRANSPARENT) {
                     Paint_SetPixel(Xpoint + Column, Ypoint + Page, Color_Background);
                     // Paint_DrawPoint(Xpoint + Column, Ypoint + Page, Color_Background, DOT_PIXEL_DFT, DOT_STYLE_DFT);
                 }
@@ -652,7 +660,7 @@ void Paint_DrawString_EN(UWORD Xstart, UWORD Ystart, const char * pString,
             Xpoint = Xstart;
             Ypoint = Ystart;
         }
-        Paint_DrawChar(Xpoint, Ypoint, * pString, Font, Color_Background, Color_Foreground);
+        Paint_DrawChar(Xpoint, Ypoint, * pString, Font, Color_Foreground, Color_Background);
 
         //The next character of the address
         pString ++;
