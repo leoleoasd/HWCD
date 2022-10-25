@@ -6,11 +6,10 @@
 
 static const char *TAG = "Ecal http";
 
-//const char index_html[] = R"html()html";
+// const char index_html[] = R"html()html";
 extern const char index_html[] asm("_binary_Ecal_html_index_html_start");
 
-String processor(const String& var)
-{
+String processor(const String &var) {
   size_t length;
   if (!NVS_ERROR_CHECK(nvs_get_str(nvs, var.c_str(), nullptr, &length))) {
     return "";
@@ -30,8 +29,8 @@ void home(AsyncWebServerRequest *request) {
 
 void update(AsyncWebServerRequest *request) {
   size_t params = request->params();
-  for(size_t i=0;i<params;i++){
-    AsyncWebParameter* p = request->getParam(i);
+  for (size_t i = 0; i < params; i++) {
+    AsyncWebParameter *p = request->getParam(i);
     ESP_ERROR_CHECK(nvs_set_str(nvs, p->name().c_str(), p->value().c_str()));
   }
   // Restart esp32 to use new wifi settings
@@ -52,7 +51,7 @@ void http_init() {
   server.on("/", HTTP_GET, home);
   server.on("/update", HTTP_GET, update);
   server.on("/clear", HTTP_GET, clear);
-  server.onNotFound([](AsyncWebServerRequest *request){
+  server.onNotFound([](AsyncWebServerRequest *request) {
     request->send(404, "text/plain", "not Found!");
   });
   server.begin();

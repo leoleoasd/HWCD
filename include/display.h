@@ -11,5 +11,9 @@
 
 void display_init();
 void display_calendar();
+void display_clear();
+void set_start_of_current_week();
+void calendar_left();
+void calendar_right();
 
 #endif // HWCD_ECAL_DISPLAY_H_

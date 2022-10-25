@@ -12,7 +12,7 @@ static const char *TAG = "ECal Init";
 
 nvs_handle_t nvs;
 
-void einit(){
+void einit() {
   ESP_LOGW(TAG, "ESP32 Booting");
   // Log memory and flash infos
   ESP_LOGI(TAG, "Chip Model: %s", ESP.getChipModel());
@@ -21,12 +21,11 @@ void einit(){
   ESP_LOGI(TAG, "Free PSRAM: %d", ESP.getFreePsram());
   ESP_LOGI(TAG, "Minimum free PSRAM: %d", ESP.getMinFreePsram());
 
-
   ESP_ERROR_CHECK(nvs_flash_init());
   ESP_ERROR_CHECK(esp_netif_init());
   ESP_ERROR_CHECK(esp_event_loop_create_default());
 
-  if(!LittleFS.begin(true)){
+  if (!LittleFS.begin(true)) {
     ESP_LOGW(TAG, "LittleFS Mount Failed");
     esp_restart();
   }
@@ -41,16 +40,16 @@ void einit(){
   ESP_ERROR_CHECK(nvs_set_i32(nvs, "restart_counter", restart_counter));
 }
 
-std::string nvs_read_string(const char* key) {
+std::string nvs_read_string(const char *key) {
   size_t required_size;
   error_t err = nvs_get_str(nvs, key, nullptr, &required_size);
-  if(!NVS_ERROR_CHECK(err)) {
+  if (!NVS_ERROR_CHECK(err)) {
     return "";
   }
-  char* value = (char*) malloc(required_size);
+  char *value = (char *)malloc(required_size);
   err = nvs_get_str(nvs, key, value, &required_size);
   NVS_ERROR_CHECK(err);
-  if(!NVS_ERROR_CHECK(err)) {
+  if (!NVS_ERROR_CHECK(err)) {
     return "";
   }
   std::string result = std::string(value);
@@ -58,7 +57,6 @@ std::string nvs_read_string(const char* key) {
   return result;
 }
 
-//0x40083825:0x3ffb2020 0x4008e869:0x3ffb2040 0x40093b95:0x3ffb2060 0x4015631f:0x3ffb20e0 0x40156366:0x3ffb2100 0x401566a7:0x3ffb2120 0x400e523b:0x3ffb2140 0x400e6c39:0x3ffb2180 0x400e74d2:0x3ffb2390 0x400e74f2:0x3ffb23b0 0x400d3e29:0x3ffb24d0 0x400d2a41:0x3ffb27e0 0x400ef166:0x3ffb2820
 std::string format(const char *fmt, ...) {
   va_list args;
   va_start(args, fmt);

@@ -2,9 +2,9 @@
 #include <Arduino.h>
 #include <nvs_flash.h>
 
-#include <WiFi.h>
 #include "init.h"
 #include "lwip/apps/sntp.h"
+#include <WiFi.h>
 
 static const char *TAG = "ECal Wifi";
 
@@ -12,7 +12,7 @@ void wifi_init() {
   std::string ssid = nvs_read_string("ssid");
   std::string pass = nvs_read_string("pass");
   bool has_ssid = !ssid.empty() && !pass.empty();
-  IPAddress  ip;
+  IPAddress ip;
   if (has_ssid) {
     // ssid found, connect to WiFi
     ESP_LOGI(TAG, "ssid: %s, pass: %s", ssid.c_str(), pass.c_str());
@@ -31,15 +31,13 @@ void wifi_init() {
     ESP_LOGI(TAG, "No ssid and pass found in NVS, Initializing AP");
     WiFiClass::mode(WIFI_AP);
     WiFi.softAP("ECal");
-//    WiFi.waitStatusBits(AP_STARTED_BIT, 10000);
+    //    WiFi.waitStatusBits(AP_STARTED_BIT, 10000);
     delay(500);
     ip = WiFi.softAPIP();
   }
   ESP_LOGI(TAG, "IP Address: %s", ip.toString().c_str());
 
-  configTzTime("Asia/Shanghai", "time.bjut.edu.cn"); // TODO CHANGE
-
-  time_t now;
+  configTzTime("CST-8", "time.bjut.edu.cn"); // TODO CHANGE
   char strftime_buf[64];
   tm timeinfo;
   getLocalTime(&timeinfo, 10000);
