@@ -2,6 +2,7 @@
 
 #include "driver/rtc_io.h"
 #include <FS.h>
+#include <FSImpl.h>
 #include <LittleFS.h>
 #include <PAJ7620U2.h>
 #include <esp_sleep.h>
@@ -15,10 +16,10 @@ void einit(){
   ESP_LOGW(TAG, "ESP32 Booting");
   // Log memory and flash infos
   ESP_LOGI(TAG, "Chip Model: %s", ESP.getChipModel());
-  ESP_LOGI(TAG, "Free heap: %d\n", ESP.getFreeHeap());
-  ESP_LOGI(TAG, "Minimum free heap: %d\n", ESP.getMinFreeHeap());
-  ESP_LOGI(TAG, "Free PSRAM: %d\n", ESP.getFreePsram());
-  ESP_LOGI(TAG, "Minimum free PSRAM: %d\n", ESP.getMinFreePsram());
+  ESP_LOGI(TAG, "Free heap: %d", ESP.getFreeHeap());
+  ESP_LOGI(TAG, "Minimum free heap: %d", ESP.getMinFreeHeap());
+  ESP_LOGI(TAG, "Free PSRAM: %d", ESP.getFreePsram());
+  ESP_LOGI(TAG, "Minimum free PSRAM: %d", ESP.getMinFreePsram());
 
 
   ESP_ERROR_CHECK(nvs_flash_init());
@@ -26,8 +27,8 @@ void einit(){
   ESP_ERROR_CHECK(esp_event_loop_create_default());
 
   if(!LittleFS.begin(true)){
-    Serial.println("LittleFS Mount Failed");
-    return;
+    ESP_LOGW(TAG, "LittleFS Mount Failed");
+    esp_restart();
   }
 
   ESP_LOGI(TAG, "Opening NVS");

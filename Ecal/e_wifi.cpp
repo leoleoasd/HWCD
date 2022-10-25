@@ -4,11 +4,11 @@
 
 #include <WiFi.h>
 #include "init.h"
+#include "lwip/apps/sntp.h"
 
 static const char *TAG = "ECal Wifi";
 
 void wifi_init() {
-  size_t length;
   std::string ssid = nvs_read_string("ssid");
   std::string pass = nvs_read_string("pass");
   bool has_ssid = !ssid.empty() && !pass.empty();
@@ -29,11 +29,20 @@ void wifi_init() {
   } else {
     // no ssid, ap mode
     ESP_LOGI(TAG, "No ssid and pass found in NVS, Initializing AP");
-    WiFi.mode(WIFI_AP);
+    WiFiClass::mode(WIFI_AP);
     WiFi.softAP("ECal");
 //    WiFi.waitStatusBits(AP_STARTED_BIT, 10000);
     delay(500);
     ip = WiFi.softAPIP();
   }
   ESP_LOGI(TAG, "IP Address: %s", ip.toString().c_str());
+
+  configTzTime("Asia/Shanghai", "time.bjut.edu.cn"); // TODO CHANGE
+
+  time_t now;
+  char strftime_buf[64];
+  tm timeinfo;
+  getLocalTime(&timeinfo, 10000);
+  strftime(strftime_buf, sizeof(strftime_buf), "%c", &timeinfo);
+  ESP_LOGI(TAG, "The current date/time in Shanghai is: %s", strftime_buf);
 }

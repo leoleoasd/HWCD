@@ -13,6 +13,7 @@
 #include "http.h"
 #include "ical.h"
 #include "init.h"
+#include "display.h"
 
 static const char *TAG = "ECal Main";
 
@@ -24,9 +25,14 @@ void setup() {
     // TODO: Write instructions on screen.
     return;
   }
-  if(!nvs_read_string("ical_url").empty()) {
-    download();
+  if(nvs_read_string("ical_url").empty()) {
+    // TODO: Write instructions on screen.
+    return;
   }
+  download();
+  display_init();
+  read();
+  display_calendar();
 //
 //
 //  ESP_ERROR_CHECK(nvs_commit(nvs));

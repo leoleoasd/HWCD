@@ -1,14 +1,18 @@
 #include "ical.h"
 #include "init.h"
 #include "url.hpp"
-#include <WiFi.h>
-#include <HTTPClient.h>
 #include <FS.h>
+#include <HTTPClient.h>
 #include <LittleFS.h>
+#include <WiFi.h>
+#include <iostream>
+#include <fstream>
 
-const char * TAG = "ECal ical";
+using std::cout;
 
+static const char* TAG = "ECal ical";
 
+unique_ptr<ICalendar> calendar;
 
 void download(){
   Url url(nvs_read_string("ical_url"));
@@ -32,6 +36,7 @@ void download(){
 //  // two \r\n s
 //  ESP_LOGI(TAG, "Got from proxy: %s", wclient.readStringUntil('\n').c_str());
 //  wclient.readStringUntil('\n');
+  // http://172.21.14.177:8000/esp32%20test.ics
   HTTPClient client;
   if(!client.begin(wclient, url.str().c_str())) {
     ESP_LOGE(TAG, "Could not begin http wclient");
@@ -44,15 +49,20 @@ void download(){
   }
   ESP_LOGE(TAG, "ICal 200 OK");
   String ical = client.getString();
-  ESP_LOGI(TAG, "Got ical: %s", ical.c_str());
+  ESP_LOGI(TAG, "Got ical");
 
   LittleFS.remove("/ical.ics");
-  File f = LittleFS.open("/ical.ics", "w");
-  if (!f) {
+  std::ofstream ical_file("/littlefs/ical.ics");
+  if (!ical_file) {
       ESP_LOGE(TAG, "Failed to open file for writing");
       esp_restart();
   }
-  f.print(ical);
-  f.close();
+  ical_file<<ical.c_str();
+  ical_file.close();
   ESP_LOGI(TAG, "Wrote ical to file");
+  client.end();
+}
+
+void read(){
+  calendar = unique_ptr<ICalendar>(new ICalendar("/littlefs/ical.ics"));
 }
