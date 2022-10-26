@@ -39,11 +39,14 @@ void setup() {
   wifi_init();
   http_init();
   if (WiFiClass::getMode() == WIFI_MODE_AP) {
-    // TODO: Write instructions on screen.
+    display_instruction(
+        format("Connect to Ecal Wifi, then go to http://%s to configure",
+               WiFi.softAPIP().toString().c_str()));
     return;
   }
   if (nvs_read_string("ical_url").empty()) {
-    // TODO: Write instructions on screen.
+    display_instruction(format("No Ical, go to http://%s to configure",
+                               WiFi.localIP().toString().c_str()));
     return;
   }
   download();
@@ -83,6 +86,7 @@ void deepsleep_awake() {
     set_start_of_current_week();
     clear_buf();
     display_calendar();
+    display_draw();
     break;
   case ESP_SLEEP_WAKEUP_TOUCHPAD:
     Serial.println("Wakeup caused by touchpad");

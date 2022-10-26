@@ -1,8 +1,8 @@
 #include "display.h"
+#include "menu.h"
 #include <Arduino.h>
 #include <PAJ7620U2.h>
 #include <gesture.h>
-#include "menu.h"
 
 static const char *TAG = "Ecal gesture";
 
@@ -65,6 +65,7 @@ void gesture_up() {
 }
 void gesture_down() {
   mode = 1;
+  menu_down();
   clear_buf();
   display_calendar();
   display_menu();
