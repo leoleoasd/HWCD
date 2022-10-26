@@ -1,10 +1,8 @@
 #include "init.h"
 
-#include "driver/rtc_io.h"
 #include <FS.h>
 #include <FSImpl.h>
 #include <LittleFS.h>
-#include <PAJ7620U2.h>
 #include <esp_sleep.h>
 #include <esp_wifi.h>
 

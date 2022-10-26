@@ -1,8 +1,8 @@
 #include "display.h"
 #include "menu.h"
 #include <Arduino.h>
-#include <PAJ7620U2.h>
-#include <gesture.h>
+#include "PAJ7620U2.h"
+#include "gesture.h"
 
 static const char *TAG = "Ecal gesture";
 

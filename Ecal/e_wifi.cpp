@@ -37,7 +37,7 @@ void wifi_init() {
   }
   ESP_LOGI(TAG, "IP Address: %s", ip.toString().c_str());
 
-  configTzTime("CST-8", "time.bjut.edu.cn"); // TODO CHANGE
+  configTzTime("CST-8", "time1.aliyun.com"); // TODO CHANGE
   char strftime_buf[64];
   tm timeinfo;
   getLocalTime(&timeinfo, 10000);
