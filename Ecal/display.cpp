@@ -103,10 +103,10 @@ void display_calendar() {
   begin[SECOND] = display_start_time.tm_sec;
   Date end = begin;
   end[DAY] += 4;
-  if(end[DAY] > end.DaysInMonth()) {
+  if (end[DAY] > end.DaysInMonth()) {
     end[DAY] -= end.DaysInMonth();
     end[MONTH] += 1;
-    if(end[MONTH] > 12) {
+    if (end[MONTH] > 12) {
       end[MONTH] = 1;
       end[YEAR] += 1;
     }
@@ -147,21 +147,20 @@ void display_calendar() {
     Date eend = e->DtEnd;
     // draw a rectangle
     int x;
-    if(estart[MONTH] != begin[MONTH]) {
+    if (estart[MONTH] != begin[MONTH]) {
       int days_of_last_month = Date::DaysInMonthS(begin[MONTH], begin[YEAR]);
       x = (estart[DAY] - begin[DAY] + days_of_last_month) * 160;
     } else {
       x = (estart[DAY] - begin[DAY]) * 160;
     }
     x += (x == 0);
-    int y = (estart[HOUR] - 9) * 60 +
-            (estart[MINUTE]); // one pixel for each minute
+    int y =
+        (estart[HOUR] - 9) * 60 + (estart[MINUTE]); // one pixel for each minute
     y += (y == 0);
     int w = 160;
     int h;
     if (eend[DAY] == estart[DAY]) {
-      h = (eend[HOUR] - estart[HOUR]) * 60 +
-          (eend[MINUTE] - estart[MINUTE]);
+      h = (eend[HOUR] - estart[HOUR]) * 60 + (eend[MINUTE] - estart[MINUTE]);
     } else {
       h = 480 - y;
     }
@@ -202,10 +201,9 @@ void display_calendar() {
       // 14:15 - 16:00
       stringstream ss;
       ss << setfill('0') << setw(2);
-      ss << estart[HOUR] << ":" << setfill('0') << setw(2)
-         << estart[MINUTE] << " - " << setfill('0') << setw(2)
-         << eend[HOUR] << ":" << setfill('0') << setw(2)
-         << eend[MINUTE];
+      ss << estart[HOUR] << ":" << setfill('0') << setw(2) << estart[MINUTE]
+         << " - " << setfill('0') << setw(2) << eend[HOUR] << ":"
+         << setfill('0') << setw(2) << eend[MINUTE];
       Paint_DrawString_EN(x + 1, y + 1 + line * 16, ss.str().c_str(), &Font16,
                           BLACK, TRANSPARENT);
       line++;

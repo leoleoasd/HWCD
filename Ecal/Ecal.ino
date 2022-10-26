@@ -14,6 +14,7 @@
 #include "http.h"
 #include "ical.h"
 #include "init.h"
+#include "menu.h"
 
 static const char *TAG = "ECal Main";
 
@@ -26,6 +27,7 @@ void setup() {
   case ESP_RST_DEEPSLEEP:
     einit();
     setenv("TZ", "CST-8", 1);
+    init_menu();
     tzset();
     display_init();
     read();
@@ -46,6 +48,7 @@ void setup() {
   }
   download();
   gesture_init();
+  init_menu();
   display_init();
   display_clear();
   read();
@@ -55,7 +58,7 @@ void setup() {
   ESP_LOGI(TAG, "main: entering deep sleep");
   rtc_gpio_pullup_en(GPIO_NUM_4);
   esp_sleep_enable_ext0_wakeup(GPIO_NUM_4, 0);
-  esp_sleep_enable_timer_wakeup(15 * 60 * 1000000ULL); // 15 min
+  esp_sleep_enable_timer_wakeup(60 * 15 * 1000000ULL); // 15 min
   delayMicroseconds(10);
   esp_deep_sleep_start();
 }
@@ -75,6 +78,8 @@ void deepsleep_awake() {
   }
   case ESP_SLEEP_WAKEUP_TIMER:
     Serial.println("Wakeup caused by timer");
+    set_start_of_current_week();
+    display_calendar();
     break;
   case ESP_SLEEP_WAKEUP_TOUCHPAD:
     Serial.println("Wakeup caused by touchpad");
@@ -88,7 +93,7 @@ void deepsleep_awake() {
   ESP_LOGI(TAG, "ds: entering deep sleep");
   rtc_gpio_pullup_en(GPIO_NUM_4);
   esp_sleep_enable_ext0_wakeup(GPIO_NUM_4, 0);
-  esp_sleep_enable_timer_wakeup(15 * 60 * 1000000ULL); // 15 min
+  esp_sleep_enable_timer_wakeup(60 * 15 * 1000000ULL); // 15 min
   delayMicroseconds(10);
   esp_deep_sleep_start();
 }

@@ -2,8 +2,9 @@
 #include <Arduino.h>
 #include <PAJ7620U2.h>
 #include <gesture.h>
+#include "menu.h"
 
-const char *TAG = "Ecal gesture";
+static const char *TAG = "Ecal gesture";
 
 RTC_SLOW_ATTR uint8_t mode = 0; // 0: calendar, 1: menu
 
@@ -55,14 +56,12 @@ void handle_gesture() {
 }
 
 void gesture_up() {
-  if (mode == 1) {
-    ;
-  }
+  mode = 1;
+  menu_up();
 }
 void gesture_down() {
-  if (mode == 1) {
-    ;
-  }
+  mode = 1;
+  menu_down();
 }
 void gesture_left() {
   if (mode == 0) {
@@ -71,7 +70,7 @@ void gesture_left() {
     display_calendar();
   }
   if (mode == 1) {
-    ;
+    menu_leave();
   }
 }
 void gesture_right() {
@@ -81,6 +80,6 @@ void gesture_right() {
     display_calendar();
   }
   if (mode == 1) {
-    ;
+    menu_enter();
   }
 }
