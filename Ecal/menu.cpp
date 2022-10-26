@@ -21,7 +21,12 @@ void init_menu() {
   auto b2 = menus[b].addChild("b2", []() { ESP_LOGI(TAG, "b2"); });
   auto c1 = menus[c].addChild("c1", []() { ESP_LOGI(TAG, "c1"); });
   auto c2 = menus[c].addChild("c2", []() { ESP_LOGI(TAG, "c2"); });
-  auto d = menus[0].addChild("d", []() { ESP_LOGI(TAG, "d"); });
+
+  menus[menus[menus[menus[0].addChild("e", []() { })]
+                  .addChild("e2", []() { })]
+            .addChild("e3", []() { })]
+      .addChild("e4", []() { });
+
 
   for(const auto &i: menus) {
     ESP_LOGI(TAG, "id: %d, name: %s, next: %d, prev: %d, child: %d, parent: %d", i.id, i.name.c_str(), i.next, i.prev, i.child, i.parent);

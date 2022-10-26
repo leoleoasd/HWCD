@@ -53,7 +53,9 @@ void setup() {
   display_clear();
   read();
   set_start_of_current_week();
+  clear_buf();
   display_calendar();
+  display_draw();
 
   ESP_LOGI(TAG, "main: entering deep sleep");
   rtc_gpio_pullup_en(GPIO_NUM_4);
@@ -79,6 +81,7 @@ void deepsleep_awake() {
   case ESP_SLEEP_WAKEUP_TIMER:
     Serial.println("Wakeup caused by timer");
     set_start_of_current_week();
+    clear_buf();
     display_calendar();
     break;
   case ESP_SLEEP_WAKEUP_TOUCHPAD:

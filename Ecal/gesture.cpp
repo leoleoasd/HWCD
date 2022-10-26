@@ -58,28 +58,47 @@ void handle_gesture() {
 void gesture_up() {
   mode = 1;
   menu_up();
+  clear_buf();
+  display_calendar();
+  display_menu();
+  display_draw();
 }
 void gesture_down() {
   mode = 1;
-  menu_down();
+  clear_buf();
+  display_calendar();
+  display_menu();
+  display_draw();
 }
 void gesture_left() {
   if (mode == 0) {
     ESP_LOGI(TAG, "Gesture: Left");
     calendar_left();
+    clear_buf();
     display_calendar();
+    display_draw();
   }
   if (mode == 1) {
     menu_leave();
+    clear_buf();
+    display_calendar();
+    display_menu();
+    display_draw();
   }
 }
 void gesture_right() {
   if (mode == 0) {
     ESP_LOGI(TAG, "Gesture: Right");
     calendar_right();
+    clear_buf();
     display_calendar();
+    display_draw();
   }
   if (mode == 1) {
     menu_enter();
+    clear_buf();
+    display_calendar();
+    display_menu();
+    display_draw();
   }
 }

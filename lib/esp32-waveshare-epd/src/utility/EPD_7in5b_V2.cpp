@@ -91,6 +91,7 @@ void EPD_7IN5B_V2_WaitUntilIdle(void)
 }
 
 
+int wait_until_idle = 1;
 /******************************************************************************
 function :	Turn On Display
 parameter:
@@ -99,7 +100,7 @@ static void EPD_7IN5B_V2_TurnOnDisplay(void)
 {
     EPD_7IN5B_V2_SendCommand(0x12);			//DISPLAY REFRESH
     DEV_Delay_ms(100);	        //!!!The delay here is necessary, 200uS at least!!!
-    EPD_7IN5B_V2_WaitUntilIdle();
+    if(wait_until_idle) EPD_7IN5B_V2_WaitUntilIdle();
 }
 
 /******************************************************************************

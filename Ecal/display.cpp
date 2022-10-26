@@ -1,6 +1,7 @@
 #include "display.h"
 
 #include "ical.h"
+#include "menu.h"
 #include <iomanip>
 #include <sstream>
 
@@ -38,7 +39,9 @@ void display_init() {
   }
 }
 
-void display_clear() { EPD_7IN5B_V2_Clear(); }
+void display_clear() {
+  // EPD_7IN5B_V2_Clear();
+}
 
 RTC_NOINIT_ATTR tm display_start_time;
 
@@ -90,6 +93,13 @@ void calendar_right() {
   }
 }
 
+void clear_buf(){
+  Paint_SelectImage(black_image);
+  Paint_Clear(WHITE);
+  Paint_SelectImage(red_image);
+  Paint_Clear(WHITE);
+}
+
 void display_calendar() {
   tm current_time;
   getLocalTime(&current_time);
@@ -120,7 +130,6 @@ void display_calendar() {
   // we only draw from 9am to 5pm
 
   Paint_SelectImage(black_image);
-  Paint_Clear(WHITE);
   // draw lines
   for (int i = 0; i < 6; i++) {
     Paint_DrawLine(i * 160 + (i == 0), 0, i * 160 + (i == 0), 480, BLACK,
@@ -255,6 +264,7 @@ void display_calendar() {
     }
   }
 
+  Paint_SelectImage(red_image);
   // draw a line at current time
   if (current_time.tm_hour >= 9 && current_time.tm_hour <= 17 &&
       0 <= current_time.tm_mday - begin[DAY] &&
@@ -263,12 +273,70 @@ void display_calendar() {
     int y = (current_time.tm_hour - 9) * 60 +
             (current_time.tm_min); // one pixel for each minute
     ESP_LOGI(TAG, "Drawing line at %d,%d", x, y);
-    Paint_SelectImage(red_image);
-    Paint_Clear(WHITE);
     Paint_DrawLine(0, y, 800, y, RED, DOT_PIXEL_1X1, LINE_STYLE_SOLID);
     Paint_DrawLine(x, y, x + 160, y, RED, DOT_PIXEL_2X2, LINE_STYLE_SOLID);
     Paint_DrawCircle(x, y, 3, RED, DOT_PIXEL_1X1, DRAW_FILL_FULL);
     Paint_DrawCircle(x + 160, y, 3, RED, DOT_PIXEL_1X1, DRAW_FILL_FULL);
   }
+}
+
+void display_draw(){
   EPD_7IN5B_V2_Display(black_image, red_image);
+}
+
+void display_menu() {
+  size_t current_menu = global_selecting;
+  vector<size_t> parents;
+  if(menus[current_menu].child != -1)
+    parents.push_back(current_menu);
+  while(menus[current_menu].parent != -1) {
+    current_menu = menus[current_menu].parent;
+    parents.push_back(current_menu);
+  }
+  if(parents[parents.size() - 1] != 0){
+    ESP_LOGW(TAG, "Root isn't root but %d", global_selecting);
+    return;
+  }
+  for(auto i: parents) {
+    ESP_LOGI(TAG, "Parent: %d", i);
+  }
+  int x = 1;
+  int y = 1;
+  ESP_LOGI(TAG, "Drawing menu");
+  Paint_SelectImage(black_image);
+  for(int index = parents.size() - 1; index >= 0; -- index) {
+    const auto &menu = menus[parents[index]];
+    ESP_LOGI(TAG, "Drawing menu %d at %d,%d", index, x, y);
+    ESP_LOGI(TAG, "id: %d, name: %s, next: %d, prev: %d, child: %d, parent: %d", menu.id, menu.name.c_str(), menu.next, menu.prev, menu.child, menu.parent);
+    size_t child_size = 0;
+    size_t now = menu.child;
+    while(now != -1) {
+      child_size++;
+      now = menus[now].next;
+      if(now == menu.child) break;
+    }
+    ESP_LOGI(TAG, "child_size: %d", child_size);
+    Paint_DrawRectangle(x, y, x + 200, y + 20 * child_size, WHITE, DOT_PIXEL_1X1, DRAW_FILL_FULL);
+    Paint_DrawRectangle(x, y, x + 200, y + 20 * child_size, BLACK, DOT_PIXEL_1X1, DRAW_FILL_EMPTY);
+    // sep line
+    for(int i = 1; i < child_size; i++) {
+      Paint_DrawLine(x, y + 20 * i, x + 200, y + 20 * i, BLACK, DOT_PIXEL_1X1, LINE_STYLE_DOTTED2);
+    }
+    // draw text
+    now = menu.child;
+    int ny = y;
+    do {
+      const auto &child = menus[now];
+      if(now == this_selecting || (index != 0 && now == parents[index - 1])) {
+        Paint_DrawRectangle(x, ny, x + 200, ny + 20, BLACK, DOT_PIXEL_1X1, DRAW_FILL_FULL);
+        Paint_DrawString_EN(x + 1, ny + 2, child.name.c_str(), &Font16, WHITE, BLACK);
+        y = ny;
+      } else {
+        Paint_DrawString_EN(x + 1, ny + 2, child.name.c_str(), &Font16, BLACK, TRANSPARENT);
+      }
+      ny += 20;
+      now = menus[now].next;
+    } while(now != menu.child);
+    x += 200;
+  }
 }

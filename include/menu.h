@@ -5,6 +5,7 @@
 #include <utility>
 #include <vector>
 RTC_SLOW_ATTR extern size_t this_selecting;
+RTC_SLOW_ATTR extern size_t global_selecting;
 class Menu;
 extern std::vector<Menu> menus;
 class Menu {

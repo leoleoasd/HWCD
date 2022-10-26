@@ -10,10 +10,13 @@
 #include "GUI_Paint.h"
 
 void display_init();
+void clear_buf();
+void display_menu();
 void display_calendar();
 void display_clear();
 void set_start_of_current_week();
 void calendar_left();
 void calendar_right();
+void display_draw();
 
 #endif // HWCD_ECAL_DISPLAY_H_
