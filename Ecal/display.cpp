@@ -60,7 +60,7 @@ void set_start_of_current_week() {
       display_start_time.tm_year -= 1;
     }
     display_start_time.tm_mday += Date::DaysInMonthS(
-        display_start_time.tm_mon, display_start_time.tm_year + 1900);
+        display_start_time.tm_mon + 1, display_start_time.tm_year + 1900);
   }
   display_start_time.tm_hour = 0;
   display_start_time.tm_min = 0;
@@ -295,6 +295,9 @@ void display_instruction(const std::string &str) {
 }
 
 void display_menu() {
+  if(global_selecting == -1) {
+    return;
+  }
   size_t current_menu = global_selecting;
   vector<size_t> parents;
   if (this_selecting != -1 && menus[this_selecting].child != -1)

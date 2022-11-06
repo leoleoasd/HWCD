@@ -21,10 +21,7 @@ static const char *TAG = "ECal Main";
 void deepsleep_awake() __attribute__((noreturn));
 
 void setup() {
-  switch (esp_reset_reason()) {
-  case ESP_RST_POWERON:
-    break;
-  case ESP_RST_DEEPSLEEP:
+  if(esp_reset_reason() == ESP_RST_DEEPSLEEP) {
     einit();
     setenv("TZ", "CST-8", 1);
     init_menu();
@@ -32,8 +29,7 @@ void setup() {
     display_init();
     read();
     deepsleep_awake();
-  default:
-    ESP_LOGW(TAG, "Unexpected reset reason: %d", esp_reset_reason());
+    return;
   }
   einit();
   wifi_init();

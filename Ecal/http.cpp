@@ -64,8 +64,6 @@ void update(AsyncWebServerRequest *request) {
   }
   // Restart esp32 to use new wifi settings
   esp_restart();
-
-  request->send_P(200, "text/html", index_html, processor);
 }
 
 void clear(AsyncWebServerRequest *request) {
